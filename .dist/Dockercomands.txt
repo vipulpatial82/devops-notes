@@ -33,16 +33,15 @@ Creates a container and runs it
 Prints a “Hello from Docker!” message
 
 Stop container:
-
 docker stop container_id
 
 Remove container:
-
 docker rm container_id
 
 Remove image:
-
 docker rmi image_name
 
 docker images it will tell all the images 
 docker images ls means previous one image 
+
+ eg:  docker run ubuntu  docker stop ubuntu 
