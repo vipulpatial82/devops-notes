@@ -1,0 +1,337 @@
+What is Docker?
+
+Docker is a platform used to build, package, and run applications inside containers.
+
+A container contains everything required to run an application:
+
+Application code
+
+Libraries
+
+Dependencies
+
+Runtime environment
+
+System tools
+
+Because of this, the application runs exactly the same everywhere.
+
+Example:
+
+Developer Laptop → Testing Server → Production Server
+
+Without Docker, the application may fail because different systems have different environments.
+
+Docker solves the famous problem:
+
+"It works on my machine but not on yours"
+2️⃣ Docker Daemon
+
+Docker Daemon (dockerd) is the core engine of Docker.
+
+It runs in the background and manages all Docker operations.
+
+Responsibilities of Docker Daemon:
+
+• Build Docker images
+• Run containers
+• Stop containers
+• Manage networks
+• Manage volumes
+• Pull images from Docker Hub
+• Push images to Docker Hub
+
+In simple words:
+
+Docker Daemon = Brain of Docker
+
+All Docker commands communicate with the daemon.
+
+Example flow:
+
+Docker CLI → Docker Daemon → Containers / Images
+3️⃣ Docker CLI (Command Line Interface)
+
+Docker CLI is used to interact with Docker using commands.
+
+Example commands:
+
+docker run
+docker pull
+docker build
+docker ps
+docker stop
+
+When you run a command like:
+
+docker run ubuntu
+
+The command goes to Docker Daemon, which creates and runs a container.
+
+4️⃣ Docker Desktop
+
+Docker Desktop is a Graphical User Interface (GUI) application.
+
+It is mainly used on:
+
+Windows
+
+macOS
+
+Docker Desktop provides:
+
+• Container management
+• Image management
+• CPU / Memory usage monitoring
+• Logs of containers
+• Container start/stop options
+
+It allows developers to manage Docker visually instead of only using commands.
+
+5️⃣ Docker Hub
+
+Docker Hub is a cloud registry where Docker images are stored.
+
+Think of Docker Hub like:
+
+Docker Hub = GitHub for Docker Images
+
+It allows developers to:
+
+• Upload images
+• Download images
+• Share images with others
+
+Examples of official images available:
+
+ubuntu
+node
+nginx
+mysql
+redis
+mongodb
+python
+
+Command to download an image:
+
+docker pull ubuntu
+
+This command downloads the Ubuntu image from Docker Hub.
+
+6️⃣ Docker Image
+
+A Docker Image is a read-only template used to create containers.
+
+It contains:
+
+• Operating system environment
+• Application code
+• Dependencies
+• Libraries
+• Configuration files
+
+Example images:
+
+Ubuntu Image
+NodeJS Image
+Python Image
+MongoDB Image
+Redis Image
+
+Important concept:
+
+Image = Blueprint / Template
+Container = Running instance of an image
+
+Example:
+
+docker run ubuntu
+
+This command creates a container from the Ubuntu image.
+
+7️⃣ Docker Container
+
+A Docker Container is a running instance of a Docker image.
+
+Containers provide:
+
+• Isolated environment
+• Fast startup
+• Lightweight execution
+• Portability across systems
+
+Example:
+
+docker run ubuntu
+
+This command:
+
+Checks if the Ubuntu image exists
+
+If not, it downloads it from Docker Hub
+
+Creates a container
+
+Runs the container
+
+Containers are isolated, meaning one container does not affect another container.
+
+8️⃣ Custom Images
+
+Developers can create their own Docker images.
+
+Example:
+
+Ubuntu + NodeJS
+Ubuntu + Python
+Ubuntu + MongoDB
+Ubuntu + Redis
+
+These are called custom images.
+
+Custom images are created using a file called:
+
+Dockerfile
+
+Example Dockerfile:
+
+FROM ubuntu
+RUN apt update
+RUN apt install nodejs
+
+This creates a custom Ubuntu image with NodeJS installed.
+
+9️⃣ Running a Container
+
+Command:
+
+docker run -it ubuntu
+
+Explanation:
+
+docker run  → creates and runs container
+-i          → interactive mode
+-t          → attach terminal
+ubuntu      → image name
+
+This command starts an Ubuntu container with terminal access.
+
+So you can run Linux commands inside it.
+
+Example:
+
+ls
+pwd
+apt update
+🔟 List Containers
+
+To see running containers:
+
+docker container ls
+
+or
+
+docker ps
+
+Output shows:
+
+• Container ID
+• Image name
+• Status
+• Ports
+
+To see all containers (running + stopped):
+
+docker container ls -a
+
+This shows containers that are:
+
+• Running
+• Stopped
+• Exited
+
+1️⃣1️⃣ Start and Stop Containers
+
+Start a container:
+
+docker start container_name
+
+Stop a container:
+
+docker stop container_name
+
+Example:
+
+docker start mycontainer
+docker stop mycontainer
+1️⃣2️⃣ Execute Commands Inside Container
+
+Command:
+
+docker exec container_name command
+
+Example:
+
+docker exec mycontainer ls
+
+This runs the ls command inside the container.
+
+Interactive command:
+
+docker exec -it container_name bash
+
+Explanation:
+
+-i → interactive
+-t → terminal
+bash → shell inside container
+
+This connects your local terminal to the container terminal.
+
+1️⃣3️⃣ Removing Containers
+
+Delete a container:
+
+docker rm container_name
+1️⃣4️⃣ Removing Images
+
+Delete an image:
+
+docker rmi image_name
+
+Example:
+
+docker rmi ubuntu
+1️⃣5️⃣ Example Real Use Case
+
+Run a web server using Docker:
+
+docker run -d -p 8080:80 nginx
+
+Explanation:
+
+-d → run container in background
+-p → map ports
+8080 → host port
+80 → container port
+nginx → image name
+
+Now open browser:
+
+http://localhost:8080
+
+You will see the NGINX web server running.
+
+1️⃣6️⃣ Containers vs Virtual Machines
+Feature	Virtual Machine	Docker Container
+OS	Full OS	Uses host OS
+Size	Large	Small
+Speed	Slow	Fast
+Startup	Minutes	Seconds
+
+Important concept:
+
+VM → Full Operating System
+Container → Application + Dependencies
+
+Containers share the host OS kernel, making them lightweight.
