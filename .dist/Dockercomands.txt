@@ -43,3 +43,5 @@ docker rmi image_name
 
 docker images it will tell all the images 
 docker images ls means previous one image 
+
+ eg:  docker run ubuntu  docker stop ubuntu 
