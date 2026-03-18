@@ -1,0 +1,56 @@
+Step 1: Create your app & Dockerfile
+You write your app (main.js) and a Dockerfile to define how the image is built.
+
+Step 2: Build the image locally
+docker build -t vipul-nodejs .
+
+Copy
+docker build — creates a Docker image from your Dockerfile
+
+-t vipul-nodejs — gives it a local name/tag
+
+. — means use the current directory as build context
+
+Step 3: Login to Docker Hub
+docker login
+
+Copy
+You must be logged in before pushing
+
+Enter your Docker Hub username (vipulpatial82) and password
+
+Step 4: Tag the image with your Docker Hub username
+docker tag vipul-nodejs:latest vipulpatial82/vipul-nodejs:latest
+
+Copy
+Docker Hub requires the format: username/imagename:tag
+
+vipul-nodejs:latest — your local image name
+
+vipulpatial82/vipul-nodejs:latest — the Docker Hub destination
+
+latest — the tag name (tagname in your command was just a placeholder, replace it with something real like latest, v1.0, v2 etc.)
+
+Step 5: Push to Docker Hub
+docker push vipulpatial82/vipul-nodejs:latest
+
+Copy
+Uploads all image layers to your Docker Hub account
+
+After this, the image is publicly available at docker.io/vipulpatial82/vipul-nodejs:latest
+
+Step 6: Verify on Docker Hub
+Go to https://hub.docker.com/r/vipulpatial82/vipul-nodejs
+
+You should see your image listed there
+
+Step 7: Anyone can now pull & run your image
+docker pull vipulpatial82/vipul-nodejs:latest
+docker run -d -p 4000:4000 vipulpatial82/vipul-nodejs:latest
+
+Copy
+Summary flow:
+
+Code → Dockerfile → docker build → docker tag → docker login → docker push → Docker Hub
+
+Copy

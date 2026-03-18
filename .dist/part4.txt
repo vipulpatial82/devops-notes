@@ -1,0 +1,75 @@
+Docker Compose is like the orchestrator for your Docker containers — it lets you define, configure, and run multiple containers as a single application using a simple YAML file instead of manually running docker run commands for each container.
+
+Think of it as a recipe for your app environment.
+
+Key Points:
+
+Multiple Containers
+If your app uses a backend, database, and cache (like Node.js + PostgreSQL + Redis), Docker Compose lets you define all three in one file and start them together.
+
+YAML Configuration
+You define:
+
+services: each container you need
+
+volumes: persistent storage for databases
+
+networks: how containers communicate
+
+environment: variables like database username/password
+
+Example:
+
+services:
+  web:
+    image: node:18
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+
+Single Command to Run Everything
+Instead of running multiple docker run commands, you just use:
+
+docker-compose up
+
+and it starts all your containers with the right settings.
+
+Isolation & Portability
+Each container runs isolated, and your docker-compose.yml can be shared so anyone can replicate your dev environment easily.
+
+Common Use Cases
+
+Backend + Database + Cache setup
+
+Microservices with multiple APIs
+
+Local development environments that match production 
+
+
+docker-compose.yml: file name
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: review
+  
+
+  redis:
+    image: redis:latest
+    ports: 
+      - "6379:6379"
+  
+docker compose down : means it will remove the docker composer 
+dokcer compose up -d : it menas detached mode run in background
