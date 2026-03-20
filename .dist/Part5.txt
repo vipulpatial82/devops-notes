@@ -1,0 +1,38 @@
+docker run -it  --name my_container busybox :ping google.com
+docker networking 
+Container networking refers to the ability for containers to connect to and communicate with each other, and with non-Docker network services.
+Drivers
+Docker Engine has a number of network drivers, as well as the default "bridge". On Linux, the following built-in network drivers are available:
+
+Driver	Description
+bridge	The default network driver.
+host	Remove network isolation between the container and the Docker host.
+none	Completely isolate a container from the host and other containers.
+overlay	Swarm Overlay networks connect multiple Docker daemons together.
+ipvlan	Connect containers to external VLANs.
+macvlan	Containers appear as devices on the host's network.
+
+docker network inspect bridge : here we can see that which container are connectwith that network
+dockcer bridge help to connect with container after that connceting they get there ip address and they use network
+docker network ls : it will show which networks are available are in locally
+
+docker run -it --network=host busybox : it didnot get bridge it will directly conncet with my machine
+
+ the difference between host and bridge is that port mapping like we do not do port expose like in host it will automaticlayy run which evr port is free
+ eg: docker run -it -p 3000:8000 node.js . : this is for bridge beacuse it under docker
+ eg: docker run -t node.js : host 
+
+ docker run -it --network=none busybox : it doesnit have any acess of network
+
+
+  creation of own network :
+  dokcer network create -d  bridge network_name
+
+  docker run -it --network=youtube --name thor ubuntu 
+
+
+docker volumes:
+   whenever we create a container there some memory is create after destorying the container the momory also destroy
+   for preventing this loss we have docker volumes
+
+   docker run -it -v adress : mountef address and container name
