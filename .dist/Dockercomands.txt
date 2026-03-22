@@ -20,15 +20,13 @@
  
   docker pull  reponame means = download 
   docker history  reponame = review all history 
+
+//working process of docker:
   docker run hello-world
   What happens:
-
 Docker checks if hello-world image exists locally
-
 If not, it downloads from Docker Hub
-
 Creates a container and runs it
-
 Prints a “Hello from Docker!” message
 
 Stop container:
