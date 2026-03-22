@@ -20,7 +20,6 @@
  
   docker pull  reponame means = download 
   docker history  reponame = review all history 
-
   docker run hello-world
   What happens:
 
