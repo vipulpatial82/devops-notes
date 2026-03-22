@@ -6,11 +6,8 @@ A container contains everything required to run an application:
 Application code
 
 Libraries
-
 Dependencies
-
 Runtime environment
-
 System tools
 
 Because of this, the application runs exactly the same everywhere.
