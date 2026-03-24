@@ -69,9 +69,7 @@ The command goes to Docker Daemon, which creates and runs a container.
 Docker Desktop is a Graphical User Interface (GUI) application.
 
 It is mainly used on:
-
 Windows
-
 macOS
 
 Docker Desktop provides:
