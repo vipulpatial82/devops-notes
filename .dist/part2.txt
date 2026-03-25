@@ -1,56 +1,134 @@
-Step 1: Create your app & Dockerfile
-You write your app (main.js) and a Dockerfile to define how the image is built.
+╔══════════════════════════════════════════════════════════════╗
+║       DOCKER NOTES — PART 2 : BUILD & PUSH TO DOCKER HUB    ║
+╚══════════════════════════════════════════════════════════════╝
 
-Step 2: Build the image locally
-docker build -t vipul-nodejs .
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP-BY-STEP WORKFLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Copy
-docker build — creates a Docker image from your Dockerfile
+STEP 1 — Create your app & Dockerfile
+  You write your app (main.js) and a Dockerfile to define
+  how the image is built.
 
--t vipul-nodejs — gives it a local name/tag
+──────────────────────────────────────────────────────────────
+STEP 2 — Build the image locally
 
-. — means use the current directory as build context
+  docker build -t vipul-nodejs .
 
-Step 3: Login to Docker Hub
-docker login
+  docker build      →  creates a Docker image from your Dockerfile
+  -t vipul-nodejs   →  gives it a local name/tag
+  .                 →  means use the current directory as build context
 
-Copy
-You must be logged in before pushing
+──────────────────────────────────────────────────────────────
+STEP 3 — Login to Docker Hub
 
-Enter your Docker Hub username (vipulpatial82) and password
+  docker login
 
-Step 4: Tag the image with your Docker Hub username
-docker tag vipul-nodejs:latest vipulpatial82/vipul-nodejs:latest
+  • You must be logged in before pushing
+  • Enter your Docker Hub username (vipulpatial82) and password
 
-Copy
-Docker Hub requires the format: username/imagename:tag
+──────────────────────────────────────────────────────────────
+STEP 4 — Tag the image with your Docker Hub username
 
-vipul-nodejs:latest — your local image name
+  docker tag vipul-nodejs:latest vipulpatial82/vipul-nodejs:latest
 
-vipulpatial82/vipul-nodejs:latest — the Docker Hub destination
+  Docker Hub requires the format:  username/imagename:tag
 
-latest — the tag name (tagname in your command was just a placeholder, replace it with something real like latest, v1.0, v2 etc.)
+  vipul-nodejs:latest                →  your local image name
+  vipulpatial82/vipul-nodejs:latest  →  the Docker Hub destination
+  latest                             →  the tag name
+                                        (use latest, v1.0, v2, etc.)
 
-Step 5: Push to Docker Hub
-docker push vipulpatial82/vipul-nodejs:latest
+──────────────────────────────────────────────────────────────
+STEP 5 — Push to Docker Hub
 
-Copy
-Uploads all image layers to your Docker Hub account
+  docker push vipulpatial82/vipul-nodejs:latest
 
-After this, the image is publicly available at docker.io/vipulpatial82/vipul-nodejs:latest
+  • Uploads all image layers to your Docker Hub account
+  • After this, the image is publicly available at:
+    docker.io/vipulpatial82/vipul-nodejs:latest
 
-Step 6: Verify on Docker Hub
-Go to https://hub.docker.com/r/vipulpatial82/vipul-nodejs
+──────────────────────────────────────────────────────────────
+STEP 6 — Verify on Docker Hub
 
-You should see your image listed there
+  Go to: https://hub.docker.com/r/vipulpatial82/vipul-nodejs
+  You should see your image listed there.
 
-Step 7: Anyone can now pull & run your image
-docker pull vipulpatial82/vipul-nodejs:latest
-docker run -d -p 4000:4000 vipulpatial82/vipul-nodejs:latest
+──────────────────────────────────────────────────────────────
+STEP 7 — Anyone can now pull & run your image
 
-Copy
-Summary flow:
+  docker pull vipulpatial82/vipul-nodejs:latest
+  docker run -d -p 4000:4000 vipulpatial82/vipul-nodejs:latest
 
-Code → Dockerfile → docker build → docker tag → docker login → docker push → Docker Hub
+──────────────────────────────────────────────────────────────
+SUMMARY FLOW
 
-Copy
+  Code → Dockerfile → docker build → docker tag → docker login
+       → docker push → Docker Hub
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MULTI-STAGE BUILDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Multi-stage builds reduce the final image size by separating
+the build environment from the runtime environment.
+
+Example Dockerfile with multi-stage build:
+
+  # Stage 1: Build
+  FROM node:18 AS builder
+  WORKDIR /app
+  COPY package*.json ./
+  RUN npm install
+  COPY . .
+  RUN npm run build
+
+  # Stage 2: Run
+  FROM node:18-alpine
+  WORKDIR /app
+  COPY --from=builder /app/dist ./dist
+  COPY package*.json ./
+  RUN npm install --production
+  CMD ["node", "dist/index.js"]
+
+Why use multi-stage?
+  • Stage 1 installs all dev dependencies and builds the app
+  • Stage 2 only copies the built output — no dev tools, smaller image
+  • Final image can be 10x smaller
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+.dockerignore FILE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Just like .gitignore, .dockerignore tells Docker which files
+to exclude from the build context.
+
+Example .dockerignore:
+  node_modules
+  .git
+  .env
+  *.log
+  dist
+
+Why use it?
+  • Speeds up docker build
+  • Prevents sensitive files (.env) from being copied into the image
+  • Reduces image size
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+USEFUL docker build FLAGS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  docker build -t myapp:v1 .           →  build with tag v1
+  docker build -f Dockerfile.prod .    →  use a specific Dockerfile
+  docker build --no-cache .            →  build without using cache
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TAGGING BEST PRACTICES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  vipulpatial82/myapp:latest   →  always points to newest
+  vipulpatial82/myapp:v1.0     →  specific version
+  vipulpatial82/myapp:stable   →  production-ready version
+
+══════════════════════════════════════════════════════════════

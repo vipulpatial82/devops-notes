@@ -1,44 +1,79 @@
-| Command            | Description                     | Example                             |
-| ------------------ | ------------------------------- | ----------------------------------- |
-| `docker --version` | Check Docker version            | `docker --version`                  |
-| `docker info`      | Show Docker system information  | `docker info`                       |
-| `docker pull`      | Download image from Docker Hub  | `docker pull nginx`                 |
-| `docker run`       | Run a container from image      | `docker run nginx`                  |
-| `docker run -d`    | Run container in background     | `docker run -d nginx`               |
-| `docker run -d -p` | Run container with port mapping | `docker run -d -p 8080:80 nginx`    |
-| `docker ps`        | Show running containers         | `docker ps`                         |
-| `docker ps -a`     | Show all containers             | `docker ps -a`                      |
-| `docker stop`      | Stop a running container        | `docker stop container_id`          |
-| `docker start`     | Start a stopped container       | `docker start container_id`         |
-| `docker restart`   | Restart container               | `docker restart container_id`       |
-| `docker rm`        | Remove container                | `docker rm container_id`            |
-| `docker images`    | List all images                 | `docker images`                     |
-| `docker rmi`       | Remove Docker image             | `docker rmi image_name`             |
-| `docker exec -it`  | Access container terminal       | `docker exec -it container_id bash` |
-| `docker logs`      | Show container logs             | `docker logs container_id`          |
-| `docker build -t`  | Build Docker image              | `docker build -t myimage .`         |
- 
-  docker pull  reponame means = download 
-  docker history  reponame = review all history 
+╔══════════════════════════════════════════════════════════════╗
+║             DOCKER COMMANDS REFERENCE                        ║
+╚══════════════════════════════════════════════════════════════╝
 
-//working process of docker:
-  docker run hello-world
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMMANDS CHEATSHEET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+| Command               | Description                     | Example                             |
+| --------------------- | ------------------------------- | ----------------------------------- |
+| docker --version      | Check Docker version            | docker --version                    |
+| docker info           | Show Docker system information  | docker info                         |
+| docker pull           | Download image from Docker Hub  | docker pull nginx                   |
+| docker run            | Run a container from image      | docker run nginx                    |
+| docker run -d         | Run container in background     | docker run -d nginx                 |
+| docker run -d -p      | Run container with port mapping | docker run -d -p 8080:80 nginx      |
+| docker ps             | Show running containers         | docker ps                           |
+| docker ps -a          | Show all containers             | docker ps -a                        |
+| docker stop           | Stop a running container        | docker stop container_id            |
+| docker start          | Start a stopped container       | docker start container_id           |
+| docker restart        | Restart container               | docker restart container_id         |
+| docker rm             | Remove container                | docker rm container_id              |
+| docker images         | List all images                 | docker images                       |
+| docker rmi            | Remove Docker image             | docker rmi image_name               |
+| docker exec -it       | Access container terminal       | docker exec -it container_id bash   |
+| docker logs           | Show container logs             | docker logs container_id            |
+| docker build -t       | Build Docker image              | docker build -t myimage .           |
+| docker tag            | Tag an image                    | docker tag myimage user/myimage     |
+| docker push           | Push image to Docker Hub        | docker push user/myimage            |
+| docker login          | Login to Docker Hub             | docker login                        |
+| docker logout         | Logout from Docker Hub          | docker logout                       |
+| docker inspect        | Show detailed container info    | docker inspect container_id         |
+| docker network ls     | List all networks               | docker network ls                   |
+| docker volume ls      | List all volumes                | docker volume ls                    |
+| docker volume rm      | Remove a volume                 | docker volume rm volume_name        |
+| docker cp             | Copy files from container       | docker cp container_id:/file .      |
+| docker stats          | Show live resource usage        | docker stats                        |
+| docker top            | Show running processes          | docker top container_id             |
+| docker rename         | Rename a container              | docker rename old_name new_name     |
+| docker pause          | Pause a running container       | docker pause container_id           |
+| docker unpause        | Unpause a container             | docker unpause container_id         |
+| docker system prune   | Remove all unused resources     | docker system prune                 |
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+QUICK NOTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  docker pull reponame    →  download image from Docker Hub
+  docker history reponame →  review all history of an image
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HOW DOCKER WORKS — docker run hello-world
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Command:
+    docker run hello-world
+
   What happens:
-Docker checks if hello-world image exists locally
-If not, it downloads from Docker Hub
-Creates a container and runs it
-Prints a “Hello from Docker!” message
+    Step 1  →  Docker checks if hello-world image exists locally
+    Step 2  →  If not, it downloads from Docker Hub
+    Step 3  →  Creates a container and runs it
+    Step 4  →  Prints a "Hello from Docker!" message
 
-Stop container:
-docker stop container_id
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMMON WORKFLOW EXAMPLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Remove container:
-docker rm container_id
+  Stop a container:    docker stop container_id
+  Remove a container:  docker rm container_id
+  Remove an image:     docker rmi image_name
 
-Remove image:
-docker rmi image_name
+  List all images:          docker images
+  List previous one image:  docker images ls
 
-docker images it will tell all the images 
-docker images ls means previous one image 
+  Example:
+    docker run ubuntu
+    docker stop ubuntu
 
- eg:  docker run ubuntu  docker stop ubuntu 
+══════════════════════════════════════════════════════════════

@@ -1,75 +1,163 @@
-Docker Compose is like the orchestrator for your Docker containers — it lets you define, configure, and run multiple containers as a single application using a simple YAML file instead of manually running docker run commands for each container.
+╔══════════════════════════════════════════════════════════════╗
+║          DOCKER NOTES — PART 4 : DOCKER COMPOSE             ║
+╚══════════════════════════════════════════════════════════════╝
 
-Think of it as a recipe for your app environment.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT IS DOCKER COMPOSE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Key Points:
+Docker Compose is like the orchestrator for your Docker containers.
+It lets you define, configure, and run multiple containers as a
+single application using a simple YAML file — instead of manually
+running docker run commands for each container.
+
+  ➤  Think of it as a recipe for your app environment.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY POINTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Multiple Containers
-If your app uses a backend, database, and cache (like Node.js + PostgreSQL + Redis), Docker Compose lets you define all three in one file and start them together.
+  If your app uses a backend, database, and cache
+  (like Node.js + PostgreSQL + Redis), Docker Compose lets you
+  define all three in one file and start them together.
 
-YAML Configuration
-You define:
-
-services: each container you need
-
-volumes: persistent storage for databases
-
-networks: how containers communicate
-
-environment: variables like database username/password
-
-Example:
-
-services:
-  web:
-    image: node:18
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/app
-  postgres:
-    image: postgres:latest
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+YAML Configuration — You define:
+  services      →  each container you need
+  volumes       →  persistent storage for databases
+  networks      →  how containers communicate
+  environment   →  variables like database username/password
 
 Single Command to Run Everything
-Instead of running multiple docker run commands, you just use:
-
-docker-compose up
-
-and it starts all your containers with the right settings.
+  Instead of running multiple docker run commands, you just use:
+    docker-compose up
+  and it starts all your containers with the right settings.
 
 Isolation & Portability
-Each container runs isolated, and your docker-compose.yml can be shared so anyone can replicate your dev environment easily.
+  Each container runs isolated, and your docker-compose.yml can
+  be shared so anyone can replicate your dev environment easily.
 
 Common Use Cases
+  • Backend + Database + Cache setup
+  • Microservices with multiple APIs
+  • Local development environments that match production
 
-Backend + Database + Cache setup
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXAMPLE — docker-compose.yml
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Microservices with multiple APIs
+  services:
+    web:
+      image: node:18
+      ports:
+        - "3000:3000"
+      volumes:
+        - .:/app
+    postgres:
+      image: postgres:latest
+      environment:
+        POSTGRES_USER: user
+        POSTGRES_PASSWORD: password
 
-Local development environments that match production 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REAL EXAMPLE — postgres + redis  (file name: docker-compose.yml)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+  version: '3.8'
 
-docker-compose.yml: file name
-version: '3.8'
+  services:
 
-services:
-  postgres:
-    image: postgres:latest
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: review
-  
+    postgres:
+      image: postgres:latest
+      ports:
+        - "5432:5432"
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: password
+        POSTGRES_DB: review
 
-  redis:
-    image: redis:latest
-    ports: 
-      - "6379:6379"
-  
-docker compose down : means it will remove the docker composer 
-dokcer compose up -d : it menas detached mode run in background
+    redis:
+      image: redis:latest
+      ports:
+        - "6379:6379"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOCKER COMPOSE COMMANDS CHEATSHEET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  docker compose up                  →  start all services
+  docker compose up -d               →  start in background (detached mode)
+  docker compose down                →  stop and remove containers
+  docker compose down -v             →  stop and also remove volumes
+  docker compose ps                  →  list running services
+  docker compose logs                →  show logs of all services
+  docker compose logs -f             →  follow / stream logs live
+  docker compose logs servicename    →  logs of a specific service
+  docker compose build               →  rebuild images
+  docker compose restart             →  restart all services
+  docker compose stop                →  stop without removing containers
+  docker compose exec web bash       →  open terminal inside web service
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DEPENDS_ON — CONTROL STARTUP ORDER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You can control startup order using depends_on.
+
+  services:
+    app:
+      image: node:18
+      depends_on:
+        - postgres
+    postgres:
+      image: postgres:latest
+
+→ This ensures postgres starts before app.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+NAMED VOLUMES — PERSIST DATABASE DATA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+To persist database data even after docker-compose down:
+
+  services:
+    postgres:
+      image: postgres:latest
+      volumes:
+        - pgdata:/var/lib/postgresql/data
+
+  volumes:
+    pgdata:
+
+→ This keeps your database data safe across restarts.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ENVIRONMENT VARIABLES WITH .env FILE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Use a .env file alongside docker-compose.yml:
+
+  .env file:
+    POSTGRES_USER=admin
+    POSTGRES_PASSWORD=secret
+
+  docker-compose.yml:
+    services:
+      postgres:
+        image: postgres
+        environment:
+          POSTGRES_USER: ${POSTGRES_USER}
+          POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOCKER COMPOSE vs DOCKER RUN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Docker Run                      │  Docker Compose
+  ────────────────────────────────┼──────────────────────────────
+  One container at a time         │  Multiple containers together
+  Long commands                   │  Simple YAML file
+  Manual networking               │  Auto networking between services
+  Hard to reproduce               │  Easy to share and reproduce
+
+══════════════════════════════════════════════════════════════

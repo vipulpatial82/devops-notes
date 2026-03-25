@@ -1,0 +1,120 @@
+╔══════════════════════════════════════════════════════════════╗
+║        DOCKER NOTES — PART 3 : DOCKERFILE DEEP DIVE         ║
+╚══════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT IS A DOCKERFILE?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+A Dockerfile is a text file with instructions to build a Docker image.
+Each instruction creates a new layer in the image.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BASIC STRUCTURE — DOCKERFILE INSTRUCTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  FROM        →  base image to start from
+  WORKDIR     →  set working directory inside container
+  COPY        →  copy files from host to container
+  RUN         →  run a command during image build
+  EXPOSE      →  document which port the app uses
+  CMD         →  default command to run when container starts
+  ENV         →  set environment variables
+  ARG         →  build-time variables
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXAMPLE 1 — Node.js App
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  FROM node:18-alpine
+  WORKDIR /app
+  COPY package*.json ./
+  RUN npm install
+  COPY . .
+  EXPOSE 3000
+  CMD ["node", "index.js"]
+
+Explanation:
+  FROM node:18-alpine     →  use lightweight Node.js image
+  WORKDIR /app            →  all commands run inside /app
+  COPY package*.json ./   →  copy package files first (for caching)
+  RUN npm install         →  install dependencies
+  COPY . .                →  copy rest of the app
+  EXPOSE 3000             →  document port 3000
+  CMD ["node","index.js"] →  start the app
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXAMPLE 2 — Python App
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  FROM python:3.11-slim
+  WORKDIR /app
+  COPY requirements.txt .
+  RUN pip install -r requirements.txt
+  COPY . .
+  EXPOSE 5000
+  CMD ["python", "app.py"]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COPY vs ADD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  COPY  →  simple copy from host to container (preferred)
+  ADD   →  like COPY but also supports URLs and auto-extracts .tar files
+           Use COPY unless you specifically need ADD features
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CMD vs ENTRYPOINT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  CMD         →  default command, can be overridden at runtime
+  ENTRYPOINT  →  fixed command, always runs, args can be appended
+
+Example:
+  ENTRYPOINT ["node"]
+  CMD ["index.js"]
+
+  Running:  docker run myapp server.js
+  →  runs:  node server.js   (CMD is replaced by server.js)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RUN vs CMD vs ENTRYPOINT — SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  RUN         →  executes during image BUILD  (installs packages, etc.)
+  CMD         →  executes when container STARTS  (default command)
+  ENTRYPOINT  →  executes when container STARTS  (fixed entry point)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LAYER CACHING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Docker caches each layer. If a layer hasn't changed, it reuses the cache.
+
+Best practice: copy package files and install dependencies BEFORE
+copying app code. This way, npm install only re-runs when package.json
+changes, not on every code change.
+
+  ✗ Bad order (slow builds):
+      COPY . .
+      RUN npm install
+
+  ✓ Good order (fast builds):
+      COPY package*.json ./
+      RUN npm install
+      COPY . .
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+USEFUL DOCKERFILE TIPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  • Use alpine images (node:alpine, python:slim) for smaller size
+
+  • Combine RUN commands with && to reduce layers:
+      RUN apt update && apt install -y curl git
+
+  • Always set WORKDIR instead of using root /
+
+  • Use .dockerignore to exclude unnecessary files
+
+══════════════════════════════════════════════════════════════
