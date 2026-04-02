@@ -34,5 +34,4 @@ docker run -it --network=host busybox : it didnot get bridge it will directly co
 docker volumes:
    whenever we create a container there some memory is create after destorying the container the momory also destroy
    for preventing this loss we have docker volumes
-
    docker run -it -v adress : mountef address and container name
