@@ -20,7 +20,7 @@ docker run -it --network=host busybox : it didnot get bridge it will directly co
 
  the difference between host and bridge is that port mapping like we do not do port expose like in host it will automaticlayy run which evr port is free
  eg: docker run -it -p 3000:8000 node.js . : this is for bridge beacuse it under docker
- eg: docker run -t node.js : host 
+ eg: docker run -t node.js:host 
 
  docker run -it --network=none busybox : it doesnit have any acess of network
 
