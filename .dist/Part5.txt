@@ -4,7 +4,7 @@ Container networking refers to the ability for containers to connect to and comm
 Drivers
 Docker Engine has a number of network drivers, as well as the default "bridge". On Linux, the following built-in network drivers are available:
 
-Driver	Description
+Driver	Description:
 bridge	The default network driver.
 host	Remove network isolation between the container and the Docker host.
 none	Completely isolate a container from the host and other containers.
