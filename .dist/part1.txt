@@ -6,7 +6,7 @@
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Docker is a platform used to build, package, and run applications
-inside containers.
+inside containers..
 
 A container contains everything required to run an application:
   • Application code
