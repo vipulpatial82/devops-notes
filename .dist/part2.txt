@@ -23,7 +23,6 @@ STEP 2 — Build the image locally
 STEP 3 — Login to Docker Hub
 
   docker login
-
   • You must be logged in before pushing
   • Enter your Docker Hub username (vipulpatial82) and password
 
