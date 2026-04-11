@@ -68,7 +68,6 @@ COMMON WORKFLOW EXAMPLE
   Stop a container:    docker stop container_id
   Remove a container:  docker rm container_id
   Remove an image:     docker rmi image_name
-
   List all images:          docker images
   List previous one image:  docker images ls
 
