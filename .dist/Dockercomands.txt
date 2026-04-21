@@ -54,7 +54,6 @@ HOW DOCKER WORKS — docker run hello-world
 
   Command:
     docker run hello-world
-
   What happens:
     Step 1  →  Docker checks if hello-world image exists locally
     Step 2  →  If not, it downloads from Docker Hub
