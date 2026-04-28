@@ -379,7 +379,7 @@ Shows:
 21:checking for logs
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 docker logs <container_id>
-👉 This tells you:
+👉 This tells you::
 Why container stopped
 Errors inside container
 
